@@ -1,0 +1,59 @@
+.navbar-store {
+  padding: 15px 0 0 0;
+  @media (max-width: 991.98px) {
+    background-color: white !important;
+  }
+
+  a.navbar-brand {
+    margin-bottom: 2vh !important;
+    @media (max-width: 767.98px) {
+      margin-left: 4vw !important;
+    }
+  }
+
+  .nav-item {
+    .nav-link {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    .nav-link:hover {
+      color: #E5707E !important;
+    }
+  }
+
+  .profile-picture {
+    max-height: 45px;
+  }
+
+  .card-badge {
+    display: inline-block;
+    min-width: 2em;
+    padding: 0.3em;
+    border-radius: 50%;
+    text-align: center;
+    background-color: #29a867;
+    color: white;
+    margin-left: -10px;
+  }
+
+  .btn-nav {
+    background-color: #F4A9A8;
+    border-radius: 20px;
+    color: white !important;
+  }
+
+  .btn-nav:hover {
+    background-color: #FBC6A4;
+  }
+  .navbar-toggler {
+    @media (max-width: 767.98px) {
+      margin-right: 4vw !important;
+    }
+  }
+}
+
+.navbar-store.navbar-fixed-top.scrolled {
+  background: #ffdede !important;
+  transition: background-color 250ms linear !important;
+  z-index: 99 !important;
+}
