@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Admin\CategoryRequest;
+use Illuminate\Support\Str;
 
 use Yajra\DataTables\Facades\DataTables;
 
@@ -55,7 +56,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.admin.category.create');
     }
 
     /**
@@ -66,7 +67,15 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        //
+        $path = $request->file('photo')->store('assets/category', 'public');
+
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
+        $data['photo'] = $path;
+        //dd($data);  
+        Category::create($data);        
+
+        return redirect()->route('category.index');
     }
 
     /**
@@ -88,7 +97,10 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = [];
+        $data["category"] = Category::findOrFail($id);
+
+        return view('pages.admin.category.edit', $data);
     }
 
     /**
@@ -100,7 +112,16 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, $id)
     {
-        //
+        $path = $request->file('photo')->store('assets/category', 'public');
+
+        $data = $request->all();
+        $data['slug'] = Str::slug($request->name);
+        $data['photo'] = $path;
+        //dd($data);  
+        $category = Category::findOrFail($id);
+        $category->update($data);
+
+        return redirect()->route('category.index');
     }
 
     /**
@@ -111,6 +132,9 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        $category->delete();
+
+        return redirect()->route('category.index');
     }
 }
