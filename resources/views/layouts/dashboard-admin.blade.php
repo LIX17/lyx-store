@@ -18,12 +18,14 @@
 
     <title>@yield('title')</title>
 
-    @stack('prepend-style')
+    @stack('prepend-style')    
     <link rel="stylesheet" href="./style/main.scss" />
     <link rel="stylesheet" href="/dist/style/main.css" />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link href="/style/main.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @stack('addon-style')
   </head>
 
@@ -38,12 +40,12 @@
           <div class="list-group list-group-flush">
             <a
               href="{{ route('admin-dashboard') }}"
-              class="list-group-item list-group-item-action"
+              class="list-group-item list-group-item-action {{ request()->is('admin') ? 'active' : ''  }}"
               >Dashboard</a
             >
             <a
-              href="#"
-              class="list-group-item list-group-item-action"
+              href="{{ route('product.index') }}"
+              class="list-group-item list-group-item-action {{ request()->is('admin/product*') ? 'active' : ''  }}"
               >Products</a
             >
             <a
@@ -145,7 +147,7 @@
     </div>
 
     <!-- Bootstrap core JavaScript -->
-    @stack('prepend-script')
+    @stack('prepend-script')        
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -155,10 +157,13 @@
     <script>
       AOS.init();
     </script>
-    <script>
+    <script>      
       $("#menu-toggle").click(function (e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
+      });
+      $(document).ready(function() {
+          $('.js-single-select2').select2();
       });
     </script>
     <script src="/script/navbar-scroll.js"></script>
