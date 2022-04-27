@@ -1,7 +1,7 @@
 @extends('layouts.dashboard-admin')
 
 @section('title')
-    Category
+    Product Gallery
 @endsection
 
 @section('content')
@@ -11,23 +11,22 @@
           >
             <div class="container-fluid">
               <div class="dashboard-heading">
-                <h2 class="dashboard-title">Category</h2>
-                <p class="dashboard-subtitle">Category List</p>
+                <h2 class="dashboard-title">Product Gallery</h2>
+                <p class="dashboard-subtitle">Gallery List</p>
               </div>
               <div class="dashboard-content">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <a href="{{ route('category.create') }}" class="btn btn-primary mb-3">+ Add New Category</a>
+                                <a href="{{ route('product-gallery.create') }}" class="btn btn-primary mb-3">+ Add New Gallery</a>
                                 <div class="table table-responsive">
                                     <table id="crudTable" class="table-hover scroll-horizontal-vertical w-100">
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Name</th>
-                                                <th>Photo</th>
-                                                <th>Slug</th>
+                                                <th>Product Name</th>
+                                                <th>Photo</th>                                              
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -56,9 +55,8 @@
             },
             columns:[
                 {data: 'DT_RowIndex', name: 'id'},
-                {data: 'name', name: 'name'},
-                {data: 'photo', name: 'photo'},
-                {data: 'slug', name: 'slug'},
+                {data: 'product.name', name: 'product.name'},
+                {data: 'url', name: 'url'},              
                 {
                     data: 'action',
                     name: 'action',

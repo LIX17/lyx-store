@@ -26,6 +26,7 @@ class ProductController extends Controller
         {
             $query = Product::with(['user', 'category'])->withTrashed();
             return DataTables::of($query)
+                ->addIndexColumn()
                 ->addColumn('action', function($item){
                     return '
                     <div class="btn-group">

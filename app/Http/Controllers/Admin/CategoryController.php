@@ -24,6 +24,7 @@ class CategoryController extends Controller
         {
             $query = Category::query();
             return DataTables::of($query)
+                ->addIndexColumn()
                 ->addColumn('action', function($item){
                     return '
                     <div class="btn-group">

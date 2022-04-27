@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\User;
+use App\Category;
+use App\Product;
+use App\ProductGallery;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\Admin\UserRequest;
+use App\Http\Requests\Admin\ProductRequest;
+use App\User;
 use Illuminate\Support\Str;
 
 use Yajra\DataTables\Facades\DataTables;
 
-class UserController extends Controller
+class ProductGalleryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,7 +25,7 @@ class UserController extends Controller
     {
         if(request()->ajax())
         {
-            $query = User::query();            
+            $query = ProductGallery::with(['product']);
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('action', function($item){
@@ -31,8 +34,8 @@ class UserController extends Controller
                         <div class="dropdown">
                             <button class="btn btn-primary dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown" aria-haspopup="true"  aria-expanded="false">Action</button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="'. route('user.edit', $item->id). '">Edit</a>
-                                <form action="'. route('user.destroy', $item->id) .'" method="POST">
+                                <a class="dropdown-item" href="'. route('product.edit', $item->id). '">Edit</a>
+                                <form action="'. route('product.destroy', $item->id) .'" method="POST">
                                     '. method_field('delete') . csrf_field() .'
                                     <button type="submit" class="dropdown-item text-danger">Delete</button>
                                 </form>
@@ -41,12 +44,13 @@ class UserController extends Controller
                     </div>
                     ';
                 })                
-                ->rawColumns(['action'])
+                ->editColumn('url', function($item){
+                    return $item->url ? '<img src="'. Storage::url($item->url) .'" style="max-height: 40px;"/>' : ''; 
+                })
+                ->rawColumns(['action', 'url'])
                 ->make();
-                
         }
-        
-        return view('pages.admin.user.index');
+        return view('pages.admin.product-gallery.index');
     }
 
     /**
@@ -56,7 +60,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('pages.admin.user.create');
+        $data = [];
+        $data["users"] = User::all();
+        $data["categories"] = Category::all();
+
+        return view('pages.admin.product.create', $data);
     }
 
     /**
@@ -65,14 +73,14 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(ProductRequest $request)
     {        
         $data = $request->all();
-        $data["password"] = bcrypt($request->password);
+        $data["slug"] = Str::slug($request->name);
         //dd($data);  
-        User::create($data);        
+        Product::create($data);        
 
-        return redirect()->route('user.index');
+        return redirect()->route('product.index');
     }
 
     /**
@@ -95,9 +103,11 @@ class UserController extends Controller
     public function edit($id)
     {
         $data = [];
-        $data["user"] = User::findOrFail($id);
-
-        return view('pages.admin.user.edit', $data);
+        $data["product"] = Product::findOrFail($id);
+        $data["users"] = User::all();
+        $data["categories"] = Category::all();
+        // dd($data);
+        return view('pages.admin.product.edit', $data);
     }
 
     /**
@@ -107,17 +117,15 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $id)
+    public function update(ProductRequest $request, $id)
     {        
         $data = $request->all();
-
-        if($request->password) $data['password'] = bcrypt($request->password);      
-        else unset($data['password']);
+        $data["slug"] = Str::slug($request->name);
         //dd($data);  
-        $user = User::findOrFail($id);
-        $user->update($data);
+        $product = Product::findOrFail($id);
+        $product->update($data);
 
-        return redirect()->route('user.index');
+        return redirect()->route('product.index');
     }
 
     /**
@@ -128,9 +136,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
+        $product = Product::findOrFail($id);
+        $product->delete();
 
-        return redirect()->route('user.index');
+        return redirect()->route('product.index');
     }
 }
