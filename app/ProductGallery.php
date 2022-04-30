@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProductGallery extends Model
 {
     protected $fillable = [
-        'photos', 'products_id'
+        'url', 'products_id'
     ];
 
     protected $hidden = [];

@@ -8,7 +8,7 @@ use App\ProductGallery;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\Admin\ProductRequest;
+use App\Http\Requests\Admin\ProductGalleryRequest;
 use App\User;
 use Illuminate\Support\Str;
 
@@ -33,9 +33,8 @@ class ProductGalleryController extends Controller
                     <div class="btn-group">
                         <div class="dropdown">
                             <button class="btn btn-primary dropdown-toggle mr-1 mb-1" type="button" data-toggle="dropdown" aria-haspopup="true"  aria-expanded="false">Action</button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="'. route('product.edit', $item->id). '">Edit</a>
-                                <form action="'. route('product.destroy', $item->id) .'" method="POST">
+                            <div class="dropdown-menu">                                
+                                <form action="'. route('product-gallery.destroy', $item->id) .'" method="POST">
                                     '. method_field('delete') . csrf_field() .'
                                     <button type="submit" class="dropdown-item text-danger">Delete</button>
                                 </form>
@@ -60,11 +59,10 @@ class ProductGalleryController extends Controller
      */
     public function create()
     {
-        $data = [];
-        $data["users"] = User::all();
-        $data["categories"] = Category::all();
+        $data = [];        
+        $data["products"] = Product::all();
 
-        return view('pages.admin.product.create', $data);
+        return view('pages.admin.product-gallery.create', $data);
     }
 
     /**
@@ -73,14 +71,14 @@ class ProductGalleryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public function store(ProductGalleryRequest $request)
     {        
         $data = $request->all();
-        $data["slug"] = Str::slug($request->name);
+        $data['url'] = $request->file('url')->store('assets/product', 'public'); 
         //dd($data);  
-        Product::create($data);        
+        ProductGallery::create($data);        
 
-        return redirect()->route('product.index');
+        return redirect()->route('product-gallery.index');
     }
 
     /**
@@ -102,12 +100,7 @@ class ProductGalleryController extends Controller
      */
     public function edit($id)
     {
-        $data = [];
-        $data["product"] = Product::findOrFail($id);
-        $data["users"] = User::all();
-        $data["categories"] = Category::all();
-        // dd($data);
-        return view('pages.admin.product.edit', $data);
+        
     }
 
     /**
@@ -117,15 +110,9 @@ class ProductGalleryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductRequest $request, $id)
+    public function update(ProductGalleryRequest $request, $id)
     {        
-        $data = $request->all();
-        $data["slug"] = Str::slug($request->name);
-        //dd($data);  
-        $product = Product::findOrFail($id);
-        $product->update($data);
-
-        return redirect()->route('product.index');
+        
     }
 
     /**
@@ -136,9 +123,9 @@ class ProductGalleryController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $product->delete();
+        $gallery = ProductGallery::findOrFail($id);
+        $gallery->delete();
 
-        return redirect()->route('product.index');
+        return redirect()->route('product-gallery.index');
     }
 }
