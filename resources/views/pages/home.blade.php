@@ -68,102 +68,22 @@
             </div>
             </div>
             <div class="row">
-            <div
-                class="col-6 col-md-3 col-lg-2"
-                data-aos="fade-up"
-                data-aos-delay="100"
-            >
-                <a href="#" class="component-categories d-block">
-                <div class="categories-image">
-                    <img
-                    src="images/Trend Category/Gadgets.svg"
-                    alt=""
-                    class="w-100"
-                    />
-                </div>
-                <p class="categories-text">Gadgets</p>
-                </a>
-            </div>
-            <div
-                class="col-6 col-md-3 col-lg-2"
-                data-aos="fade-up"
-                data-aos-delay="200"
-            >
-                <a href="#" class="component-categories d-block">
-                <div class="categories-image">
-                    <img
-                    src="images/Trend Category/Furnitures.svg"
-                    alt=""
-                    class="w-100"
-                    />
-                </div>
-                <p class="categories-text">Furniture</p>
-                </a>
-            </div>
-            <div
-                class="col-6 col-md-3 col-lg-2"
-                data-aos="fade-up"
-                data-aos-delay="300"
-            >
-                <a href="#" class="component-categories d-block">
-                <div class="categories-image">
-                    <img
-                    src="images/Trend Category/Tool.svg"
-                    alt=""
-                    class="w-100"
-                    />
-                </div>
-                <p class="categories-text">Tools</p>
-                </a>
-            </div>
-            <div
-                class="col-6 col-md-3 col-lg-2"
-                data-aos="fade-up"
-                data-aos-delay="400"
-            >
-                <a href="#" class="component-categories d-block">
-                <div class="categories-image">
-                    <img
-                    src="images/Trend Category/Sneaker.svg"
-                    alt=""
-                    class="w-100"
-                    />
-                </div>
-                <p class="categories-text">Sneaker</p>
-                </a>
-            </div>
-            <div
-                class="col-6 col-md-3 col-lg-2"
-                data-aos="fade-up"
-                data-aos-delay="500"
-            >
-                <a href="#" class="component-categories d-block">
-                <div class="categories-image">
-                    <img
-                    src="images/Trend Category/Makeup.svg"
-                    alt=""
-                    class="w-100"
-                    />
-                </div>
-                <p class="categories-text">Make Up</p>
-                </a>
-            </div>
-            <div
-                class="col-6 col-md-3 col-lg-2"
-                data-aos="fade-up"
-                data-aos-delay="600"
-            >
-                <a href="#" class="component-categories d-block">
-                <div class="categories-image">
-                    <img
-                    src="images/Trend Category/Baby.svg"
-                    alt=""
-                    class="w-100"
-                    />
-                </div>
-                <p class="categories-text">Baby</p>
-                </a>
-            </div>
+                @php $increment=0; @endphp
+                @foreach ($categories as $row)
+                    <div class="col-6 col-md-3 col-lg-2" data-aos="fade-up" data-aos-delay="{{ $increment+=100 }}">
+                        <a href="{{ route('categories-detail', $row->slug) }}" class="component-categories d-block">
+                        <div class="categories-image">
+                            <img
+                            src="{{ Storage::url($row->photo) }}"
+                            alt=""
+                            class="w-100"
+                            />
+                        </div>
+                        <p class="categories-text">{{ $row->name }}</p>
+                        </a>
+                    </div>
+                @endforeach
+                
             </div>
         </div>
         </section>
