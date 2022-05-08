@@ -21,23 +21,44 @@
                 Belanja kebutuhan utama, <br />
                 lebih mudah
               </h2>
-              <form action="" class="mt-3">
+              <form method="POST" action="{{ route('login') }}" class="mt-3">
+                @csrf
                 <div class="form-group">
                   <label for="Email Address">Email Address</label>
-                  <input type="email" class="form-control w-75" />
+                  <input id="email" name="email" type="email" class="form-control w-75" value="{{ old('email') }}" />
+
+                  @error('email')
+                    <span class="text-danger" role="alert">
+                      <strong>{{ $message }}</strong>
+                    </span>
+                  @enderror
                 </div>
                 <div class="form-group">
                   <label for="Password">Password</label>
-                  <input type="password" class="form-control w-75" />
+                  <input id="password" name="password" type="password" class="form-control w-75" />
+                  @error('password')
+                    <span class="text-danger" role="alert">
+                      <strong>{{ $message }}</strong>
+                    </span>
+                  @enderror
                 </div>
+                {{-- @if (count($errors) > 0)
+                    <div class="">
+                        <ul class="text-danger" style="margin: 0px">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif --}}
 
-                <a
-                  href="/dashboard.html"
+                <button
+                  type="submit"
                   class="btn btn-success btn-block w-75 mt-4"
-                  >Sign In</a
-                >
+                  >Sign In
+                </button>
                 <a
-                  href="/register.html"
+                  href="{{ route('register') }}"
                   class="btn btn-outline-secondary btn-block w-75 mt-4"
                   >Sign Up</a
                 >
