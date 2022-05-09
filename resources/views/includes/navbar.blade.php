@@ -6,7 +6,7 @@
       data-aos="fade-down"
     >
       <div class="container">
-        <a href="index.html" class="navbar-brand">
+        <a href="{{ route('home') }}" class="navbar-brand">
           <img src="images/logo.svg" alt="logo" />
         </a>
         <button
@@ -28,12 +28,52 @@
             <li class="nav-item">
               <a href="#" class="nav-link">Rewards</a>
             </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">Sign up</a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="btn btn-nav nav-link px-4">Sign In</a>
-            </li>
+            @guest
+              <li class="nav-item">
+                <a href="{{ route('register') }}" class="nav-link">Sign up</a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('login') }}" class="btn btn-nav nav-link px-4">Sign In</a>
+              </li>
+            @endguest
+            @auth
+              <!-- Desktop Menu -->
+              <ul class="navbar-nav d-none d-lg-flex">
+                <li class="nav-item dropdown">
+                  <a
+                  href="#"
+                  id="navbarDropdown"
+                  class="nav-link"
+                  role="button"
+                  data-toggle="dropdown"
+                  ><img
+                      src="/images/profile.png"
+                      alt=""
+                      class="rounded-circle mr-2 profile-picture"
+                  />Hi, {{ $user->name }}</a
+                  >
+                  <div class="dropdown-menu">
+                  <a href="{{ route('dashboard') }}" class="dropdown-item">Dashboard</a>
+                  <a href="{{ route('dashboard-setting-account') }}" class="dropdown-item"
+                      >Settings</a
+                  >
+                  <div class="dropdown-divider"></div>
+                  <a href="{{ route('logout') }}" class="dropdown-item">Logout</a>
+                  </div>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link d-inline-block mt-2"
+                    ><img src="/images/empty-cart.svg" alt=""
+                    /></a>
+                </li>
+              </ul>
+              {{-- mobile menu --}}
+              <ul class="navbar-nav d-block d-lg-none">                
+                <li class="nav-item"><a href="#" class="nav-link">Cart</a></li>
+                <li class="nav-item"><a href="{{ route('logout') }}" class="nav-link">Logout</a></li>
+              </ul>              
+            @endauth
+            
           </ul>
         </div>
       </div>

@@ -8,6 +8,7 @@ use App\Http\Requests\AuthRequest;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -29,6 +30,7 @@ class AuthController extends Controller
     public function login_post(Request $request)
     {   
         $error = [];
+        $check = User::where('email', $request->email)->first();
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required'
@@ -46,18 +48,24 @@ class AuthController extends Controller
         if(Auth::attempt($credential))
         {                
             $data = [];
+            Session::put('data_user', $check);
+            return redirect()->action([HomeController::class, 'index']);
             
-            return view('pages.home');
         }
         else
-        {
-            $check = User::where('email', $request->email)->first();
-            
+        {            
             $error["email"] = ($check == null) ?  "Account does not exist" : "Invalid Password";
             return redirect('login')
                         ->withErrors($error)
                         ->withInput();
         }
         
+    }
+
+    public function logout()
+    {
+        Auth::logout(); 
+        Session::forget('data_user');
+        return redirect()->action([HomeController::class, 'index']);
     }
 }
