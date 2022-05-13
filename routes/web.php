@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/register', 'AuthController@register')->name('register');
+Route::post('/register', 'AuthController@register_post')->name('register-post');
 Route::get('/register/success', 'AuthController@success')->name('register-success');
 Route::get('/login', 'AuthController@login')->name('login');
 Route::post('/login', 'AuthController@login_post')->name('login-post');
