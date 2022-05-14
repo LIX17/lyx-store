@@ -47,8 +47,10 @@
                   <input id="email" 
                     name="email" 
                     v-model="email"
+                    @change="checkEmail()"
                     type="email" 
                     class="form-control @error('email') is-invalid @enderror" 
+                    :class="{ 'is-invalid' : this.email_unavailable}"
                     value="{{ old('email') }}" 
                     required
                     autocomplete="email"
@@ -148,7 +150,7 @@
                 </div>
                 <div class="form-group" v-if="is_store_open">
                   <label>Category</label>
-                  <select name="category" class="form-control select2-single">
+                  <select name="category" class="form-control" >
                     <option value="" selected disabled>Select Category</option>
                     @foreach ($categories as $row)
                       <option value="{{ $row->id }}">{{ $row->name }}</option>
@@ -156,7 +158,9 @@
                   </select>
                 </div>
 
-                <button type="submit" class="btn btn-success btn-block mt-4">Sign Up now </button>
+                <button type="submit" class="btn btn-success btn-block mt-4" :disabled="this.email_unavailable">
+                  Sign Up now 
+                </button>
                 <a
                   href="{{ route('login') }}"
                   class="btn btn-outline-secondary btn-block mt-4"
@@ -171,38 +175,79 @@
 @endsection
 
 @push('addon-script')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+{{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
 <script src="/vendor/vue/vue.js"></script>
 <script src="https://unpkg.com/vue-toasted"></script>
-<script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+{{-- <script>
   $(document).ready(function() {
       $('.select2-single').select2();
+      $('.select2bs4').select2({
+        theme: 'bootstrap4'
+      });
+      $('.select2bs4-disabled').select2({
+        theme: 'bootstrap4',
+        disabled:'readonly'
+      });
   });
-</script>
+</script> --}}
 <script>
-    // Vue.use(Toasted);
+    Vue.use(Toasted);
 
     var register = new Vue({
-    el: "#register",
-    mounted() {
-        AOS.init();
-        this.$toasted.error(
-        "Maaf, tampaknya email sudah terdaftar pada sistem kami.",
-        {
-            position: "top-center",
-            className: "rounded",
-            duration: 1000,
+      el: "#register",
+      mounted() {
+        AOS.init();          
+      },
+      methods:{
+        checkEmail: function(){
+          var self = this;          
+
+          // Make a request for a user with a given ID
+          axios.get('{{ route('api-register-check') }}', {
+            params:{
+              email: this.email
+            }
+          })
+            .then(function (response) {            
+              console.log(response);
+              if(response.data == "Valid")
+              {
+                self.$toasted.show(
+                  "Email anda tersedia, silahkan melanjutkan proses registrasi!",
+                  {
+                      position: "top-center",                    
+                      className: "rounded success",
+                      duration: 1000,
+                  }
+                );
+                self.email_unavailable = false;
+              }
+              else
+              {
+                self.$toasted.error(
+                  "Maaf, tampaknya email sudah terdaftar pada sistem kami.",
+                  {
+                    position: "top-center",
+                    className: "rounded",
+                    duration: 1000,
+                  }
+                );
+                self.email_unavailable = true;
+              }
+            })
         }
-        );
-    },
-    data: {
-        name: "",
-        email: "",
-        password: "",
-        is_store_open: true,
-        store_name: "",
-    },
+      },
+      data() { 
+        return{
+          name: "",
+          email: "",
+          is_store_open: true,
+          store_name: "",
+          email_unavailable: false
+        }
+      },
     });
 </script>    
 @endpush

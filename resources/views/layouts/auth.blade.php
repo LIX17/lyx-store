@@ -8,7 +8,9 @@
     />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    
+    <link rel="stylesheet" href="/path/to/select2.css">
+    <link rel="stylesheet" href="/path/to/select2-bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
     <title>@yield('title')</title>
 
     {{-- style --}}

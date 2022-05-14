@@ -118,4 +118,9 @@ class AuthController extends Controller
         Session::forget('data_user');
         return redirect()->action([HomeController::class, 'index']);
     }
+
+    public function check(Request $request)
+    {
+        return User::where('email', $request->email)->count() > 0 ? 'Invalid' : 'Valid';
+    }
 }
