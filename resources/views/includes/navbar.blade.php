@@ -50,7 +50,7 @@
                       src="/images/profile.png"
                       alt=""
                       class="rounded-circle mr-2 profile-picture"
-                  />Hi, {{ $user->name }}</a
+                  />Hi, {{ session()->get('data_user')->name  }}</a
                   >
                   <div class="dropdown-menu">
                   <a href="{{ route('dashboard') }}" class="dropdown-item">Dashboard</a>

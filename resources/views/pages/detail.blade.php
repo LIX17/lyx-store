@@ -25,7 +25,7 @@
       </div>
     </section>
 
-    <section class="store-gallery" id="gallery">
+    <section class="store-gallery mb-3" id="gallery">
       <div class="container">
         <div class="row">
           <div class="col-lg-8" data-aos="zoom-in">
@@ -66,23 +66,23 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8">
-              <h1>Sofa Ternyaman</h1>
-              <div class="owner">By KONZ</div>
-              <div class="price">$199</div>
+              <h1>{{ $product->name }}</h1>
+              <div class="owner">By {{ $product->user->store_name }}</div>
+              <div class="price">Rp.{{ number_format($product->price,2,',','.') }}</div>
             </div>
             <div class="col-lg-2" data-aos="zoom-in">
-              <a
-                href="/cart.html"
-                class="
-                  btn btn-block btn-success
-                  text-white
-                  mb-2
-                  px-4
-                  rounded
-                  border border-white
-                "
-                >Add to Cart</a
-              >
+              @auth
+                <form action="{{ route('detail-add', $product->id) }}" method="POST" enctype="multipart/form-data">
+                  @csrf
+                  <button type="submit" class="btn btn-block btn-success text-white mb-2 px-4rounded border border-white">
+                    Add to Cart
+                  </button>
+                </form>                
+              @else
+                <a href="{{ route('login') }}" class="btn btn-block btn-success text-white mb-2 px-4rounded border border-white">
+                  Sign in to Add Product
+                </a>
+              @endauth             
             </div>
           </div>
         </div>
@@ -92,16 +92,7 @@
         <div class="container">
           <div class="row">
             <div class="col-12 col-lg-8">
-              <p>
-                LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM
-                LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM
-                LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM
-                LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM
-                LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM
-                <br /><br />
-                LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM
-                LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM
-              </p>
+              {!! $product->description !!}
             </div>
           </div>
         </div>
@@ -169,22 +160,12 @@
         data: {
           activePhoto: 0,
           photos: [
-            {
-              id: 1,
-              url: "/images/Product Details/product-details-1.jpg",
-            },
-            {
-              id: 2,
-              url: "/images/Product Details/product-details-2.jpg",
-            },
-            {
-              id: 3,
-              url: "/images/Product Details/product-details-3.jpg",
-            },
-            {
-              id: 4,
-              url: "/images/Product Details/product-details-4.jpg",
-            },
+            @foreach($product->galleries as $row)
+              {
+                id: {{ $row->id }},
+                url: "{{ Storage::url($row->url) }}",
+              },
+            @endforeach            
           ],
         },
         methods: {
