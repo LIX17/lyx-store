@@ -39,29 +39,35 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td style="width: 35%">
-                      <img
-                        src="/images/Product Details/product-details-1.jpg"
-                        alt=""
-                        class="cart-image"
-                        style="width: 60%"
-                      />
-                    </td>
-                    <td style="width: 30%">
-                      <div class="product-title">Sofa Ternyaman</div>
-                      <div class="product-subtitle">by Andy</div>
-                    </td>
-                    <td style="width: 30%">
-                      <div class="product-title">$107</div>
-                      <div class="product-subtitle">USD</div>
-                    </td>
-                    <td style="width: 20%">
-                      <a href="#" class="btn btn-remove-cart btn-primary"
-                        >Remove</a
-                      >
-                    </td>
-                  </tr>
+                  @foreach ($carts as $row)
+                    <tr>
+                      
+                        @if($row->product->galleries)
+                          <td style="width: 35%">
+                            <img
+                              src="{{ Storage::url($row->product->galleries->first()->url) }}"
+                              alt=""
+                              class="cart-image"
+                              style="width: 60%"
+                            />
+                          </td>
+                        @endif
+                      <td style="width: 30%">
+                        <div class="product-title">{{ $row->product->name }}</div>
+                        <div class="product-subtitle">by {{ $row->product->user->store_name }}</div>
+                      </td>
+                      <td style="width: 30%">
+                        <div class="product-title">Rp.{{ number_format($row->product->price,2,',','.') }}</div>
+                        <div class="product-subtitle">IDR</div>
+                      </td>
+                      <td style="width: 20%">
+                        <form action="{{ route('cart-delete', $row->id) }}" method="POST">
+                          @csrf
+                          <button type="submit" class="btn btn-remove-cart btn-primary">Delete</button>                       
+                        </form>                        
+                      </td>
+                    </tr>
+                  @endforeach                  
                 </tbody>
               </table>
             </div>
