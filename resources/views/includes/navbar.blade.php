@@ -62,9 +62,17 @@
                   </div>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link d-inline-block mt-2"
-                    ><img src="/images/empty-cart.svg" alt=""
-                    /></a>
+                    <a href="{{ route('cart') }}" class="nav-link d-inline-block mt-2">
+                      @php
+                        $cart = Session::get('cart')->count();
+                      @endphp
+                      @if ($cart > 0)
+                        <img src="/images/cart.svg" alt=""/>
+                        <div class="card-badge">{{ $cart }}</div>
+                      @else
+                        <img src="/images/empty-cart.svg" alt=""/>
+                      @endif                      
+                    </a>
                 </li>
               </ul>
               {{-- mobile menu --}}

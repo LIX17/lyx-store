@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Requests\AuthRequest;
 use App\User;
+use App\Cart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
@@ -61,6 +62,7 @@ class AuthController extends Controller
         {                
             $data = [];
             Session::put('data_user', $check);
+            Session::put('cart', Cart::where('users_id', $check->id)->get());
             return redirect()->action([HomeController::class, 'index']);
             
         }
@@ -99,6 +101,7 @@ class AuthController extends Controller
         {                
             $data = [];
             Session::put('data_user', $check);
+            Session::put('cart', Cart::where('users_id', $check->id)->get());
             return redirect()->action([HomeController::class, 'index']);
             
         }
@@ -116,6 +119,7 @@ class AuthController extends Controller
     {
         Auth::logout(); 
         Session::forget('data_user');
+        Session::forget('cart');
         return redirect()->action([HomeController::class, 'index']);
     }
 

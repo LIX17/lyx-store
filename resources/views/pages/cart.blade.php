@@ -39,9 +39,11 @@
                   </tr>
                 </thead>
                 <tbody>
+                  @php
+                      $total = 0;
+                  @endphp
                   @foreach ($carts as $row)
-                    <tr>
-                      
+                    <tr>                      
                         @if($row->product->galleries)
                           <td style="width: 35%">
                             <img
@@ -67,6 +69,7 @@
                         </form>                        
                       </td>
                     </tr>
+                    @php $total += $row->product->price @endphp
                   @endforeach                  
                 </tbody>
               </table>
@@ -76,116 +79,162 @@
             <div class="col-12"><hr /></div>
             <div class="col-12"><h2 class="mb-4">Shipping Details</h2></div>
           </div>
-          <div class="row mb-2" data-aos="fade-up" data-aos-delay="200">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="addressOne">Address 1</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="addressOne"
-                  id="addressOne"
-                  value="Serta Camz"
-                />
+          <form action="" id="locations">            
+            <div class="row mb-2" data-aos="fade-up" data-aos-delay="200">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="address_one">Address 1</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="address_one"
+                    id="address_one"
+                    value="Serta Camz"
+                  />
+                </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="addressTwo">Address 2</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="addressTwo"
-                  id="addressTwo"
-                  value="Blok C No.27"
-                />
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="address_two">Address 2</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="address_two"
+                    id="address_two"
+                    value="Blok C No.27"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="province">Province</label>
-                <select class="form-control" name="province" id="province">
-                  <option value="West Java">West Java</option>
-                </select>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="province_id">Province</label>
+                  <select class="form-control" name="province_id" id="province_id" v-if="province" v-model="province_id">                                        
+                    {{-- <option value="default">Select Province</option> --}}
+                    <option v-for="data in province" :value="data.id">@{{ data.name }}</option>
+                  </select>
+                  <select class="form-control" v-else></select>
+                </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="city">City</label>
-                <select class="form-control" name="city" id="city">
-                  <option value="Bandung">Bandung</option>
-                </select>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="regencies_id">Regency</label>
+                  <select class="form-control" name="regencies_id" id="regencies_id" v-if="regency" v-model="regencies_id">                    
+                    <option v-for="data in regency" :value="data.id">@{{ data.name }}</option>
+                  </select>
+                  <select class="form-control" v-else></select>                 
+                </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="postalCode">Postal Code</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="postalCode"
-                  id="postalCode"
-                  value="30701"
-                />
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="zip_code">Postal Code</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="zip_code"
+                    id="zip_code"
+                    value="30701"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="country">Country</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="country"
-                  id="country"
-                  value="Indonesia"
-                />
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="country">Country</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="country"
+                    id="country"
+                    value="Indonesia"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="phone_number">Phone Number</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="phone_number"
+                    id="phone_number"
+                    value="+628 21 1717 7777"
+                  />
+                </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="mobile">Mobile</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="mobile"
-                  id="mobile"
-                  value="+628 21 1717 7777"
-                />
+            <div class="row" data-aos="fade-up" data-aos-delay="150">
+              <div class="col-12"><hr /></div>
+              <div class="col-12"><h2 class="mb-2">Payment Information</h2></div>
+            </div>
+            <div class="row" data-aos="fade-up" data-aos-delay="200">
+              <div class="col-4 col-md-2">
+                <div class="product-title">Rp.{{ number_format(0,2,',','.') }}</div>
+                <div class="product-subtitle">Tax</div>
+              </div>
+              <div class="col-4 col-md-3">
+                <div class="product-title">Rp.{{ number_format(0,2,',','.') }}</div>
+                <div class="product-subtitle">Product Insurance</div>
+              </div>
+              <div class="col-4 col-md-2">
+                <div class="product-title">Rp.{{ number_format(0,2,',','.') }}</div>
+                <div class="product-subtitle">Shipping Cost</div>
+              </div>
+              <div class="col-4 col-md-2">
+                <div class="product-title text-success">Rp.{{ number_format($total,2,',','.') }}</div>
+                <div class="product-subtitle">Total</div>
+              </div>
+              <div class="col-8 col-md-3">
+                <button type="submit" class="btn btn-success mt-4 px-4 btn-block">Checkout Now</button>                
               </div>
             </div>
-          </div>
-          <div class="row" data-aos="fade-up" data-aos-delay="150">
-            <div class="col-12"><hr /></div>
-            <div class="col-12"><h2 class="mb-2">Payment Information</h2></div>
-          </div>
-          <div class="row" data-aos="fade-up" data-aos-delay="200">
-            <div class="col-4 col-md-2">
-              <div class="product-title">$10</div>
-              <div class="product-subtitle">Tax</div>
-            </div>
-            <div class="col-4 col-md-3">
-              <div class="product-title">$200</div>
-              <div class="product-subtitle">Product Insurance</div>
-            </div>
-            <div class="col-4 col-md-2">
-              <div class="product-title">$500</div>
-              <div class="product-subtitle">Ship to Jakarta</div>
-            </div>
-            <div class="col-4 col-md-2">
-              <div class="product-title text-success">$500,000</div>
-              <div class="product-subtitle">Total</div>
-            </div>
-            <div class="col-8 col-md-3">
-              <a
-                href="/success.html"
-                class="btn btn-success mt-4 px-4 btn-block"
-                >Checkout Now</a
-              >
-            </div>
-          </div>
+          </form>          
         </div>
       </section>
     </div>
 @endsection
+
+@push('addon-script')
+    <script src="/vendor/vue/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      var locations = new Vue({
+        el: "#locations",
+        mounted() {
+          AOS.init();
+          this.getProvince();
+        },
+        data: {
+          province: null,
+          regency: null,
+          province_id: null,
+          regencies_id: null,
+          selected: 'default'
+        },
+        methods: {
+          getProvince()
+          {
+            var self = this;
+            axios.get('{{ route('api-get-province') }}')
+              .then(function(response){
+                self.province = response.data;
+              })
+          },
+          getRegency()
+          {
+            var self = this;
+            axios.get('{{ url('api/regency') }}/' + self.province_id)
+              .then(function(response){
+                self.regency = response.data;
+              })
+          },
+        },
+        watch:{
+          province_id: function(val, oldVal){
+            this.regencies_id = null;
+            this.getRegency();
+          }
+        },
+      });      
+    </script>
+@endpush

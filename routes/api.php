@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/register/check', 'AuthController@check')->name('api-register-check');
+Route::get('/province', 'API\LocationController@get_province')->name('api-get-province');
+Route::get('/regency/{province_id}', 'API\LocationController@get_regency')->name('api-get-regency');

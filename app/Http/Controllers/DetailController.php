@@ -26,6 +26,8 @@ class DetailController extends Controller
         ];
 
         Cart::create($data);
+        Session::forget('cart');
+        Session::put('cart', Cart::where('users_id', Session::get('data_user')->id)->get());
 
         return redirect()->route('cart');
     }
