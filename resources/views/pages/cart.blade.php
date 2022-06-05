@@ -79,7 +79,9 @@
             <div class="col-12"><hr /></div>
             <div class="col-12"><h2 class="mb-4">Shipping Details</h2></div>
           </div>
-          <form action="" id="locations">            
+          <form action="{{ route('checkout') }}" id="locations" enctype="multipart/form-data" method="POST">            
+            @csrf
+            <input type="hidden" name="total_price" value="{{ $total }}">
             <div class="row mb-2" data-aos="fade-up" data-aos-delay="200">
               <div class="col-md-6">
                 <div class="form-group">

@@ -29,9 +29,10 @@ Route::post('/details/{id}', 'DetailController@add')->name('detail-add');
 Route::middleware('auth')->group(function(){
     Route::get('/cart', 'CartController@index')->name('cart');
     Route::post('/cart/{id}', 'CartController@delete')->name('cart-delete');
+    Route::get('/success', 'CartController@success')->name('success');
+    Route::post('/checkout', 'CheckoutController@process')->name('checkout');
+    Route::get('/checkout/callback', 'CheckoutController@callback')->name('midtrans-callback');
 });
-
-Route::get('/success', 'CartController@success')->name('success');
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::get('/dashboard/products', 'DashboardProductController@index')->name('dashboard-product');
