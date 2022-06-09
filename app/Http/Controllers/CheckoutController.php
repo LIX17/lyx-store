@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use App\Cart;
 use App\Transaction;
 use App\TransactionDetail;
@@ -45,8 +46,12 @@ class CheckoutController extends Controller
                 'code' => $trans,
             ]);
         }
+        //delete cart data
+        Cart::where('users_id', Auth::user()->id)->delete();
+        Session::forget('cart');
+        Session::put('cart', Cart::where('users_id', Auth::user()->id)->get());
 
-        //config midtrans
+        //config midtrans   
         // Set your Merchant Server Key
         Config::$serverKey = config('services.midtrans.serverKey');
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
