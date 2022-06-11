@@ -15,7 +15,7 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-
+    <link rel="icon" type="image/png" sizes="32x32" href="{{URL::asset('images/favicon-32x32.png')}}">
     <title>@yield('title')</title>
 
     @stack('prepend-style')    

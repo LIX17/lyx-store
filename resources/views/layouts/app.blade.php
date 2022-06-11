@@ -8,7 +8,7 @@
     />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    
+    <link rel="icon" type="image/png" sizes="32x32" href="{{URL::asset('images/favicon-32x32.png')}}">
     <title>@yield('title')</title>
 
     {{-- style --}}

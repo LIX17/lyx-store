@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Product;
+use App\Transaction;
 
 class TransactionDetail extends Model
 {
@@ -23,4 +25,14 @@ class TransactionDetail extends Model
     protected $hidden = [
       
     ];
+
+    public function product()
+    {
+        return $this->hasOne(Product::class, 'id', 'products_id');
+    }
+
+    public function transaction()
+    {
+        return $this->hasOne(Transaction::class, 'id', 'transactions_id');
+    }
 }
