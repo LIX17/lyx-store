@@ -120,7 +120,7 @@
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label for="regencies_id">Regency</label>
+                  <label for="regencies_id">City</label>
                   <select class="form-control" name="regencies_id" id="regencies_id" v-if="regency" v-model="regencies_id">                    
                     <option v-for="data in regency" :value="data.id">@{{ data.name }}</option>
                   </select>

@@ -51,18 +51,20 @@ Route::middleware('auth')
         Route::post('/dashboard/products/gallery/upload', 'DashboardProductController@uploadGallery')->name('dashboard-product-gallery-upload');
         Route::get('/dashboard/products/gallery/delete/{id}', 'DashboardProductController@deleteGallery')->name('dashboard-product-gallery-delete');
 
-
         Route::get('/dashboard/transactions', 'DashboardTransactionController@index')->name('dashboard-transactions');
         Route::get('/dashboard/transactions/{id}', 'DashboardTransactionController@detail')->name('dashboard-transactions-detail');
+        Route::post('/dashboard/transactions/{id}', 'DashboardTransactionController@update')->name('dashboard-transactions-update');
 
         Route::get('/dashboard/settings', 'DashboardSettingController@store')->name('dashboard-setting-store');
         Route::get('/dashboard/account', 'DashboardSettingController@account')->name('dashboard-setting-account');
+        Route::post('/dashboard/account/{redirect}', 'DashboardSettingController@update')->name('dashboard-setting-redirect');
+
     });
 
 
 
 // ->middleware(['auth','admin'])
-Route::prefix('admin')->namespace('Admin')
+Route::prefix('admin')->namespace('Admin')->middleware(['auth', 'admin'])
     ->group(function(){
         Route::get('/', 'DashboardController@index')->name('admin-dashboard');
         Route::resource('category', 'CategoryController');

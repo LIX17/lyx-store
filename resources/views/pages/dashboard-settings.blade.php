@@ -18,7 +18,8 @@
         <div class="dashboard-content">
           <div class="row">
             <div class="col-12">
-              <form action="">
+              <form action="{{ route('dashboard-setting-redirect', 'dashboard-setting-store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
                 <div class="card">
                   <div class="card-body">
                     <div class="row">
@@ -27,24 +28,30 @@
                           <label>Nama Toko</label>
                           <input
                             type="text"
-                            name=""
+                            name="store_name"
                             id=""
                             class="form-control"
+                            value="{{ $user->store_name }}"
                           />
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <div class="form-group">
-                          <label>Kategori</label>
-                          <select
-                            name="category"
+                          <div class="form-group">
+                            <label>Kategori</label>
+                            <select
+                            name="categories_id"
                             id=""
                             class="form-control"
-                          >
-                            <option value="" disabled selected>
-                              Select Category
-                            </option>
-                          </select>
+                            >
+                                <option value="" disabled selected>
+                                    Select Category
+                                </option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                       </div>
                       <div class="col-md-6">
@@ -58,9 +65,10 @@
                           <input
                             type="radio"
                             class="custom-control-input"
-                            name="is_store_open"
+                            name="store_status"
                             id="openStoreTrue"
-                            value="true"
+                            value="1"
+                            {{ $user->store_status == 1 ? 'checked' : '' }}
                           />
                           <label
                             for="openStoreTrue"
@@ -75,9 +83,10 @@
                           <input
                             type="radio"
                             class="custom-control-input"
-                            name="is_store_open"
+                            name="store_status"
                             id="openStoreFalse"
-                            value="false"
+                            value="0"
+                            {{ $user->store_status != 1 ? 'checked' : '' }}
                           />
                           <label
                             for="openStoreFalse"
