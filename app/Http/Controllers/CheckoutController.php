@@ -11,6 +11,7 @@ use App\TransactionDetail;
 use Exception;
 use Midtrans\Snap;
 use Midtrans\Config;
+use Midtrans\Notification;
 
 class CheckoutController extends Controller
 {
@@ -92,6 +93,62 @@ class CheckoutController extends Controller
     }
     public function callback(Request $request)
     {
+        //configuratin midtrans
+        Config::$serverKey = config('services.midtrans.serverKey');
+        Config::$isProduction = config('services.midtrans.isProduction');
+        Config::$isSanitized = config('services.midtrans.isSanitized');
+        Config::$is3ds = config('services.midtrans.is3ds');
 
+        //instance midtrans notifications
+        $notif = new Notification();
+
+        //declare variables
+        $status = $notif->transaction_status;
+        $type = $notif->payment_type;
+        $fraud = $notif->fraud_status;
+        $order_id = $notif->order_id;
+
+        //transactions query
+        $transaction = Transaction::findOrFail($order_id);
+
+        //handle status notification
+        if($status == 'capture')
+        {
+            if($type == 'credit_card')
+            {
+                if($fraud == 'challenge')
+                {
+                    $transaction->status = 'PENDING';
+                }
+                else
+                {
+                    $transaction->status = 'SUCCESS';
+                }
+            }
+        }
+        else if($status == 'settlement')
+        {
+            $transaction->status = 'SUCCESS';
+        }
+        else if($status == 'pending')
+        {
+            $transaction->status = 'PENDING';
+        }
+        else if($status == 'deny')
+        {
+            $transaction->status = 'CANCELLED';
+        }
+        else if($status == 'expire')
+        {
+            $transaction->status = 'CANCELLED';
+        }
+        else if($status == 'cancel')
+        {
+            $transaction->status = 'CANCELLED';
+        }
+
+        //save transaction
+        $transaction->save();
+        
     }
 }
